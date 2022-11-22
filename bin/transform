@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'register_transformer_sk/apps/transformer'
+
+RegisterTransformerSk::Apps::Transformer.new.call
