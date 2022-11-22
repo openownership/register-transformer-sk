@@ -127,11 +127,11 @@ module RegisterTransformerSk
         return @resolver_response if @resolver_response
 
         @resolver_response = entity_resolver.resolve(
-          RegisterSourcesOc::ResolverRequest.new(
+          RegisterSourcesOc::ResolverRequest[{
             company_number: company_number,
             jurisdiction_code: jurisdiction_code,
             name: company_name
-          )
+          }.compact]
         )
       end
 
