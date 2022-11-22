@@ -36,7 +36,7 @@ module RegisterTransformerSk
         @record = record
         @entity_resolver = entity_resolver
         @geocoder_client = geocoder_client || Clients::GoogleGeocoderClient.new
-        @logger = logger || Logger.new(nil)
+        @logger = logger || Logger.new(STDOUT)
       end
 
       def call
@@ -68,6 +68,9 @@ module RegisterTransformerSk
           dissolutionDate: dissolution_date,
           publicationDetails: publication_details,
         }.compact]
+      rescue RegisterSourcesOc::Clients::ReconciliationClient::Error => e
+        logger.error e
+        nil
       end
 
       private
