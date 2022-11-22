@@ -87,7 +87,6 @@ RSpec.describe RegisterTransformerSk::BodsMapping::RecordProcessor do
     ownership_or_control_statement = double 'ownership_or_control_statement'
     expect(ownership_or_control_statement_mapper).to receive(:call).with(
       sk_record,
-      entity_resolver: entity_resolver,
       source_statement: source_statement,
       target_statement: target_statement
     ).and_return ownership_or_control_statement

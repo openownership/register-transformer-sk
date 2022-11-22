@@ -60,7 +60,6 @@ module RegisterTransformerSk
       def map_relationship(sk_record, child_entity, parent_entity)
         ownership_or_control_statement_mapper.call(
           sk_record,
-          entity_resolver: entity_resolver,
           source_statement: parent_entity,
           target_statement: child_entity
         )
