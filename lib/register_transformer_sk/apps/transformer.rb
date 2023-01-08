@@ -18,12 +18,12 @@ module RegisterTransformerSk
         @bods_mapper = bods_mapper || RegisterTransformerSk::BodsMapping::RecordProcessor.new(
           entity_resolver: entity_resolver,
           bods_publisher: bods_publisher,
-          s3_adapter: s3_adapter,
-          s3_bucket: ENV['BODS_S3_BUCKET_NAME'],
         )
         @stream_client = RegisterCommon::Services::StreamClientKinesis.new(
           credentials: RegisterTransformerSk::Config::AWS_CREDENTIALS,
-          stream_name: ENV.fetch('SK_STREAM', 'SK_STREAM')
+          stream_name: ENV.fetch('SK_STREAM', 'SK_STREAM'),
+          s3_adapter: s3_adapter,
+          s3_bucket: ENV['BODS_S3_BUCKET_NAME'],
         )
         @consumer_id = "RegisterTransformerSk"
       end
