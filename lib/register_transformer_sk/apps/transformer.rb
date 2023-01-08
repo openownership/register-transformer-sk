@@ -1,5 +1,5 @@
 require 'register_transformer_sk/config/settings'
-require 'register_transformer_dk/config/adapters'
+require 'register_transformer_sk/config/adapters'
 require 'register_sources_bods/services/publisher'
 require 'register_transformer_sk/bods_mapping/record_processor'
 require 'register_sources_sk/structs/record'
