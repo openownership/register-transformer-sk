@@ -31,8 +31,13 @@ module RegisterTransformerSk
       def call
         stream_client.consume(consumer_id) do |record_data|
           record = JSON.parse(record_data, symbolize_names: true)
-          sk_record = RegisterSourcesSk::Record[**record]
-          bods_mapper.process(sk_record)
+
+          begin
+            sk_record = RegisterSourcesSk::Record[**record]
+            bods_mapper.process(sk_record)
+          rescue => e
+            print "Got error: ", e, " for record: ", record_data, "\n\n"
+          end
         end
       end
 
