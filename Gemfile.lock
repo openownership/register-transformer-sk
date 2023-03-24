@@ -19,7 +19,8 @@ GIT
 
 GIT
   remote: git@github.com:openownership/register-sources-bods.git
-  revision: 4d16e9825d66fd9064743abce065eda9b8f3a8d2
+  revision: 6c519375bad5d25b10394c27e40d37a515f86e97
+  branch: performance-improvements-v2
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -74,7 +75,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7)
+    activesupport (6.1.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -107,7 +108,7 @@ GEM
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     countries (4.0.1)
       i18n_data (~> 0.13.0)
@@ -120,7 +121,7 @@ GEM
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
     dry-inflector (1.0.0)
-    dry-logic (1.4.0)
+    dry-logic (1.5.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -129,11 +130,11 @@ GEM
       dry-types (>= 1.7, < 2)
       ice_nine (~> 0.11)
       zeitwerk (~> 2.6)
-    dry-types (1.7.0)
+    dry-types (1.7.1)
       concurrent-ruby (~> 1.0)
-      dry-core (~> 1.0, < 2)
-      dry-inflector (~> 1.0, < 2)
-      dry-logic (>= 1.4, < 2)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
     elasticsearch (7.10.1)
       elasticsearch-api (= 7.10.1)
@@ -143,7 +144,7 @@ GEM
     elasticsearch-transport (7.10.1)
       faraday (~> 1)
       multi_json
-    faraday (1.10.2)
+    faraday (1.10.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -176,9 +177,9 @@ GEM
     ice_nine (0.11.2)
     iso8601 (0.13.0)
     jmespath (1.6.2)
-    minitest (5.17.0)
+    minitest (5.18.0)
     multi_json (1.15.0)
-    multipart-post (2.2.3)
+    multipart-post (2.3.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     nokogiri (1.13.10-x86_64-linux)
@@ -206,14 +207,14 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sixarm_ruby_unaccent (1.2.0)
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     xxhash (0.5.0)
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   x86_64-linux

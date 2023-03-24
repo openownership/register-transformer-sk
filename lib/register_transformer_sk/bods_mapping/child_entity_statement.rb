@@ -7,6 +7,7 @@ require 'register_sources_bods/structs/entity_statement'
 require 'register_sources_bods/structs/identifier'
 require 'register_sources_bods/structs/jurisdiction'
 require 'register_sources_bods/constants/publisher'
+require 'register_sources_bods/mappings/resolver_mappings'
 
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/object/try'
@@ -25,6 +26,8 @@ require 'register_transformer_sk/clients/google_geocoder_client'
 module RegisterTransformerSk
   module BodsMapping
     class ChildEntityStatement
+      include RegisterSourcesBods::Mappers::ResolverMappings
+
       ID_PREFIX = 'openownership-register-'.freeze
       OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'
 
@@ -91,13 +94,13 @@ module RegisterTransformerSk
       end
 
       def addresses
-        return [] if address.blank?
+        return super if address.blank?
 
         nationality = ISO3166::Country[jurisdiction_code]
-        return unless nationality
-        country = nationality.try(:alpha2)
+        return super unless nationality
 
-        return [] if country.blank? # TODO: check this
+        country = nationality.try(:alpha2)
+        return super if country.blank? # TODO: check this
 
         [
           RegisterSourcesBods::Address.new(
@@ -123,7 +126,7 @@ module RegisterTransformerSk
       end
 
       def company_name
-        @company_name ||= item.ObchodneMeno.strip
+        @company_name ||= item.ObchodneMeno.strip || name
       end
     
       def resolver_response
@@ -138,53 +141,8 @@ module RegisterTransformerSk
         )
       end
 
-      def open_corporates_identifier
-        return unless resolver_response && resolver_response.resolved
-
-        jurisdiction = resolver_response.jurisdiction_code
-        company_number = resolver_response.company_number
-        oc_url = "https://opencorporates.com/companies/#{jurisdiction}/#{company_number}"
-
-        RegisterSourcesBods::Identifier[{
-          id: oc_url,
-          schemeName: OPEN_CORPORATES_SCHEME_NAME,
-          uri: oc_url
-        }]
-      end
-
       def statement_id
         'TODO'
-      end
-
-      def incorporated_in_jurisdiction
-        jurisdiction_code = resolver_response.jurisdiction_code
-        return unless jurisdiction_code
-      
-        code, = jurisdiction_code.split('_')
-        country = ISO3166::Country[code]
-        return nil if country.blank?
-
-        RegisterSourcesBods::Jurisdiction.new(name: country.name, code: country.alpha2)
-      end
-
-      def founding_date
-        return unless resolver_response.company
-        date = resolver_response.company.incorporation_date&.to_date
-        return unless date
-        date.try(:iso8601)
-      rescue Date::Error
-        LOGGER.warn "Entity has invalid incorporation_date: #{date}"
-        nil
-      end
-
-      def dissolution_date
-        return unless resolver_response.company
-        date = resolver_response.company.dissolution_date&.to_date
-        return unless date
-        date.try(:iso8601)
-      rescue Date::Error
-        LOGGER.warn "Entity has invalid dissolution_date: #{date}"
-        nil
       end
 
       def publication_details
