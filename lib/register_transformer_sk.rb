@@ -6,7 +6,7 @@ require 'active_support/core_ext/time'
 require 'active_support/core_ext/string/conversions'
 require 'active_support/core_ext/object/json'
 
-Time.zone='UTC'
+Time.zone = 'UTC'
 
 module RegisterTransformerSk
   class Error < StandardError; end

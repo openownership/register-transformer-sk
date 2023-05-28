@@ -16,14 +16,14 @@ module RegisterTransformerSk
         entity_resolver ||= RegisterSourcesOc::Services::ResolverService.new
         s3_adapter ||= RegisterTransformerSk::Config::Adapters::S3_ADAPTER
         @bods_mapper = bods_mapper || RegisterTransformerSk::BodsMapping::RecordProcessor.new(
-          entity_resolver: entity_resolver,
-          bods_publisher: bods_publisher,
+          entity_resolver:,
+          bods_publisher:,
         )
         @stream_client = RegisterCommon::Services::StreamClientKinesis.new(
           credentials: RegisterTransformerSk::Config::AWS_CREDENTIALS,
           stream_name: ENV.fetch('SK_STREAM', 'SK_STREAM'),
-          s3_adapter: s3_adapter,
-          s3_bucket: ENV['BODS_S3_BUCKET_NAME'],
+          s3_adapter:,
+          s3_bucket: ENV.fetch('BODS_S3_BUCKET_NAME', nil),
         )
         @consumer_id = "RegisterTransformerSk"
       end
@@ -35,7 +35,7 @@ module RegisterTransformerSk
           begin
             sk_record = RegisterSourcesSk::Record[**record]
             bods_mapper.process(sk_record)
-          rescue => e
+          rescue StandardError => e
             print "Got error: ", e, " for record: ", record_data, "\n\n"
           end
         end
@@ -44,9 +44,9 @@ module RegisterTransformerSk
       private
 
       attr_reader :bods_mapper, :stream_client, :consumer_id
-      
+
       def handle_records(records)
-        records.each do |record|
+        records.each do |_record|
           bods_mapper.process sk_record
         end
       end

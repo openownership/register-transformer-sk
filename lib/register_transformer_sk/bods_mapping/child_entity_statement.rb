@@ -17,7 +17,7 @@ require 'active_support/core_ext/string/conversions'
 require 'countries'
 require 'iso8601'
 
-Time.zone='UTC'
+Time.zone = 'UTC'
 
 require 'register_sources_oc/structs/resolver_request'
 
@@ -29,17 +29,17 @@ module RegisterTransformerSk
       include RegisterSourcesBods::Mappers::ResolverMappings
 
       ID_PREFIX = 'openownership-register-'.freeze
-      OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'
+      OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'.freeze
 
       def self.call(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
-        new(record, entity_resolver: entity_resolver, geocoder_client: geocoder_client, logger: nil).call
+        new(record, entity_resolver:, geocoder_client:, logger: nil).call
       end
 
       def initialize(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
         @record = record
         @entity_resolver = entity_resolver
         @geocoder_client = geocoder_client || Clients::GoogleGeocoderClient.new
-        @logger = logger || Logger.new(STDOUT)
+        @logger = logger || Logger.new($stdout)
       end
 
       def call
@@ -62,11 +62,11 @@ module RegisterTransformerSk
             RegisterSourcesBods::Identifier.new(
               scheme: 'SK-ORSR',
               schemeName: 'Ministry of Justice Business Register',
-              id: item.Ico
+              id: item.Ico,
             ),
-            open_corporates_identifier
+            open_corporates_identifier,
           ].compact,
-          addresses: addresses,
+          addresses:,
           foundingDate: founding_date,
           dissolutionDate: dissolution_date,
           publicationDetails: publication_details,
@@ -105,10 +105,10 @@ module RegisterTransformerSk
         [
           RegisterSourcesBods::Address.new(
             type: RegisterSourcesBods::AddressTypes['registered'], # TODO: check this
-            address: address,
+            address:,
             # postCode: nil,
-            country: country
-          )
+            country:,
+          ),
         ]
       end
 
@@ -117,7 +117,7 @@ module RegisterTransformerSk
 
         raw_address = item.Adresa
         first_line = [raw_address.OrientacneCislo, raw_address.MenoUlice].map(&:presence).compact.join(' ')
-    
+
         @address = [first_line, raw_address.Mesto, raw_address.Psc].map(&:presence).compact.map(&:strip).join(', ')
       end
 
@@ -128,16 +128,16 @@ module RegisterTransformerSk
       def company_name
         @company_name ||= item.ObchodneMeno.strip || name
       end
-    
+
       def resolver_response
         return @resolver_response if @resolver_response
 
         @resolver_response = entity_resolver.resolve(
           RegisterSourcesOc::ResolverRequest[{
-            company_number: company_number,
-            jurisdiction_code: jurisdiction_code,
-            name: company_name
-          }.compact]
+            company_number:,
+            jurisdiction_code:,
+            name: company_name,
+          }.compact],
         )
       end
 
@@ -150,7 +150,7 @@ module RegisterTransformerSk
           publicationDate: Time.now.utc.to_date.to_s, # TODO: fix publication date
           bodsVersion: RegisterSourcesBods::BODS_VERSION,
           license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER
+          publisher: RegisterSourcesBods::PUBLISHER,
         )
       end
     end

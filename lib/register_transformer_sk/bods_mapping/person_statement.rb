@@ -29,28 +29,28 @@ module RegisterTransformerSk
           isComponent: is_component,
           personType: person_type,
           unspecifiedPersonDetails: unspecified_person_details,
-          names: names,
-          identifiers: identifiers,
-          nationalities: nationalities,
+          names:,
+          identifiers:,
+          nationalities:,
           placeOfBirth: place_of_birth, # not implemented in register
           birthDate: birth_date,
           deathDate: death_date,
           placeOfResidence: place_of_residence,
           taxResidencies: tax_residencies,
-          addresses: addresses,
+          addresses:,
           hasPepStatus: has_pep_status,
           pepStatusDetails: pep_status_details,
           publicationDetails: publication_details,
-          source: source,
-          annotations: annotations,
-          replacesStatements: replaces_statements
+          source:,
+          annotations:,
+          replacesStatements: replaces_statements,
         }.compact]
       end
 
       private
 
       attr_reader :sk_record
-    
+
       def statement_id
         "TODO" # This is filled in when statement is published
       end
@@ -72,7 +72,7 @@ module RegisterTransformerSk
           RegisterSourcesBods::Identifier.new(
             id: sk_record.Id.to_s,
             schemeName: 'SK Register Partnerov Verejného Sektora',
-          )
+          ),
         ]
       end
 
@@ -85,7 +85,7 @@ module RegisterTransformerSk
           RegisterSourcesBods::Name.new(
             type: RegisterSourcesBods::NameTypes['individual'],
             fullName: name_string,
-          )
+          ),
         ]
       end
 
@@ -93,12 +93,15 @@ module RegisterTransformerSk
         nationality = country_from_nationality.try(:alpha2)
 
         return unless nationality
+
         country = ISO3166::Country[nationality]
         return nil if country.blank?
+
         [
-          RegisterSourcesBods::Country.new(name: country.name, code: country.alpha2)
+          RegisterSourcesBods::Country.new(name: country.name, code: country.alpha2),
         ]
       end
+
       def country_from_nationality
         ISO3166::Country.find_country_by_number(sk_record.StatnaPrislusnost.StatistickyKod)
       end
@@ -130,6 +133,7 @@ module RegisterTransformerSk
 
         nationality = country_from_nationality
         return unless nationality
+
         country = nationality.try(:alpha2)
 
         return [] if country.blank? # TODO: check this
@@ -137,10 +141,10 @@ module RegisterTransformerSk
         [
           RegisterSourcesBods::Address.new(
             type: RegisterSourcesBods::AddressTypes['registered'], # TODO: check this
-            address: address,
+            address:,
             # postCode: nil,
-            country: country
-          )
+            country:,
+          ),
         ]
       end
 
@@ -170,7 +174,7 @@ module RegisterTransformerSk
           publicationDate: Time.now.utc.to_date.to_s, # TODO: fix publication date
           bodsVersion: RegisterSourcesBods::BODS_VERSION,
           license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER
+          publisher: RegisterSourcesBods::PUBLISHER,
         )
       end
 
@@ -180,7 +184,7 @@ module RegisterTransformerSk
           description: 'SK Register Partnerov Verejného Sektora',
           url: "https://rpvs.gov.sk/OpenData/Partneri",
           retrievedAt: Time.now.utc.to_date.to_s, # TODO: fix publication date, # TODO: add retrievedAt to sk_record iso8601
-          assertedBy: nil # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
+          assertedBy: nil, # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
         )
       end
 
@@ -194,7 +198,7 @@ module RegisterTransformerSk
 
       def address_string(address)
         first_line = [address.OrientacneCislo, address.MenoUlice].map(&:presence).compact.join(' ')
-    
+
         [first_line, address.Mesto, address.Psc].map(&:presence).compact.map(&:strip).join(', ')
       end
 
@@ -204,9 +208,9 @@ module RegisterTransformerSk
 
       def entity_dob(timestamp)
         return unless timestamp
-    
+
         ISO8601::Date.new(timestamp.split('T')[0])
       end
     end
   end
-end    
+end

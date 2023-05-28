@@ -4,7 +4,7 @@ module RegisterTransformerSk
   module Clients
     class GoogleGeocoderClient
       def initialize(api_key: nil, error_adapter: nil)
-        Geokit::Geocoders::GoogleGeocoder.api_key = api_key || ENV['GOOGLE_GEOCODE_API_KEY']
+        Geokit::Geocoders::GoogleGeocoder.api_key = api_key || ENV.fetch('GOOGLE_GEOCODE_API_KEY', nil)
         @error_adapter = error_adapter
       end
 
