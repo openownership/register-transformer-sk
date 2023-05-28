@@ -8,7 +8,7 @@ require 'register_sources_bods/structs/source'
 require 'register_sources_bods/structs/subject'
 
 require 'active_support/core_ext/time'
-Time.zone='UTC'
+Time.zone = 'UTC'
 
 module RegisterTransformerSk
   module BodsMapping
@@ -33,11 +33,11 @@ module RegisterTransformerSk
           statementType: statement_type,
           statementDate: statement_date,
           isComponent: false,
-          subject: subject,
+          subject:,
           interestedParty: interested_party,
-          interests: interests,
+          interests:,
           publicationDetails: publication_details,
-          source: source
+          source:,
         }.compact]
       end
 
@@ -72,7 +72,7 @@ module RegisterTransformerSk
 
       def subject
         RegisterSourcesBods::Subject.new(
-          describedByEntityStatement: target_statement.statementID
+          describedByEntityStatement: target_statement.statementID,
         )
       end
 
@@ -87,17 +87,17 @@ module RegisterTransformerSk
         case source_statement.statementType
         when RegisterSourcesBods::StatementTypes['personStatement']
           RegisterSourcesBods::InterestedParty[{
-            describedByPersonStatement: source_statement.statementID
+            describedByPersonStatement: source_statement.statementID,
           }]
         when RegisterSourcesBods::StatementTypes['entityStatement']
           case source_statement.entityType
           when RegisterSourcesBods::EntityTypes['unknownEntity']
             RegisterSourcesBods::InterestedParty[{
-              unspecified: source_statement.unspecifiedEntityDetails
+              unspecified: source_statement.unspecifiedEntityDetails,
             }.compact]
           when RegisterSourcesBods::EntityTypes['legalEntity']
             RegisterSourcesBods::InterestedParty[{
-              describedByEntityStatement: source_statement.statementID
+              describedByEntityStatement: source_statement.statementID,
             }]
           else
             RegisterSourcesBods::InterestedParty[{}] # TODO: raise error
@@ -112,7 +112,7 @@ module RegisterTransformerSk
           publicationDate: Time.now.utc.to_date.to_s,
           bodsVersion: RegisterSourcesBods::BODS_VERSION,
           license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER
+          publisher: RegisterSourcesBods::PUBLISHER,
         )
       end
 
@@ -122,7 +122,7 @@ module RegisterTransformerSk
           description: 'SK Register Partnerov Verejného Sektora',
           url: "https://rpvs.gov.sk/OpenData/Partneri",
           retrievedAt: Time.now.utc.to_date.to_s, # TODO: fix publication date, # TODO: add retrievedAt to record iso8601
-          assertedBy: nil # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
+          assertedBy: nil, # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
         )
       end
     end

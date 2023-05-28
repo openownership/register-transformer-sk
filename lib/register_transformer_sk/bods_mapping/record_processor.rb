@@ -32,6 +32,7 @@ module RegisterTransformerSk
 
         child_entity = map_child_entity(sk_record)
         return unless child_entity
+
         child_entity = bods_publisher.publish(child_entity)
 
         parent_records = sk_record.KonecniUzivateliaVyhod
@@ -47,21 +48,21 @@ module RegisterTransformerSk
       private
 
       attr_reader :entity_resolver, :person_statement_mapper, :error_adapter,
-        :child_entity_statement_mapper, :ownership_or_control_statement_mapper, :bods_publisher
+                  :child_entity_statement_mapper, :ownership_or_control_statement_mapper, :bods_publisher
 
       def map_parent_entity(parent_record)
         person_statement_mapper.call(parent_record)
       end
 
       def map_child_entity(sk_record)
-        child_entity_statement_mapper.call(sk_record, entity_resolver: entity_resolver)
+        child_entity_statement_mapper.call(sk_record, entity_resolver:)
       end
 
       def map_relationship(sk_record, child_entity, parent_entity)
         ownership_or_control_statement_mapper.call(
           sk_record,
           source_statement: parent_entity,
-          target_statement: child_entity
+          target_statement: child_entity,
         )
       end
     end
