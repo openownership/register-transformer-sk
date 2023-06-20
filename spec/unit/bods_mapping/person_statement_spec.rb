@@ -57,15 +57,6 @@ RSpec.describe RegisterTransformerSk::BodsMapping::PersonStatement do
           { code: "SK", name: "Slovakia" },
         ],
         personType: "knownPerson",
-        publicationDetails: {
-          bodsVersion: "0.2",
-          license: "https://register.openownership.org/terms-and-conditions",
-          publicationDate: "2022-09-14",
-          publisher: {
-            name: "OpenOwnership Register",
-            url: "https://register.openownership.org",
-          },
-        },
         source: {
           assertedBy: nil,
           description: "SK Register Partnerov Verejného Sektora",
@@ -73,7 +64,6 @@ RSpec.describe RegisterTransformerSk::BodsMapping::PersonStatement do
           type: "officialRegister",
           url: "https://rpvs.gov.sk/OpenData/Partneri",
         },
-        statementID: "TODO",
         statementType: "personStatement",
       },
     )

@@ -3,7 +3,7 @@ version: '3.7'
 services:
   register_transformer_sk:
     image: register_transformer_sk:latest
-    entrypoint: "bundle exec /app/bin/transform"
+    #entrypoint: "bundle exec /app/bin/transform"
     network_mode: host
     environment:
       - ELASTICSEARCH_HOST
@@ -13,6 +13,7 @@ services:
       - ELASTICSEARCH_PASSWORD
       - OC_API_TOKEN
       - OC_API_TOKEN_PROTECTED
+      - BODS_S3_BUCKET_NAME
       - BODS_AWS_REGION
       - BODS_AWS_ACCESS_KEY_ID
       - BODS_AWS_SECRET_ACCESS_KEY
@@ -20,6 +21,7 @@ services:
       - REDIS_PORT
       - SK_STREAM
       - BODS_STREAM
+      - BODS_INDEX
       - GOOGLE_GEOCODE_API_KEY
     restart: always
 

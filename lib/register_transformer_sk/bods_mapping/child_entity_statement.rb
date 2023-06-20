@@ -6,7 +6,6 @@ require 'register_sources_bods/structs/address'
 require 'register_sources_bods/structs/entity_statement'
 require 'register_sources_bods/structs/identifier'
 require 'register_sources_bods/structs/jurisdiction'
-require 'register_sources_bods/constants/publisher'
 require 'register_sources_bods/mappers/resolver_mappings'
 
 require 'active_support/core_ext/object/blank'
@@ -17,18 +16,17 @@ require 'active_support/core_ext/string/conversions'
 require 'countries'
 require 'iso8601'
 
-Time.zone = 'UTC'
-
 require 'register_sources_oc/structs/resolver_request'
 
 require 'register_transformer_sk/clients/google_geocoder_client'
+
+Time.zone = 'UTC'
 
 module RegisterTransformerSk
   module BodsMapping
     class ChildEntityStatement
       include RegisterSourcesBods::Mappers::ResolverMappings
 
-      ID_PREFIX = 'openownership-register-'.freeze
       OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'.freeze
 
       def self.call(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
@@ -52,7 +50,6 @@ module RegisterTransformerSk
         end
 
         RegisterSourcesBods::EntityStatement[{
-          statementID: statement_id,
           statementType: RegisterSourcesBods::StatementTypes['entityStatement'],
           isComponent: false,
           name: company_name,
@@ -69,7 +66,6 @@ module RegisterTransformerSk
           addresses:,
           foundingDate: founding_date,
           dissolutionDate: dissolution_date,
-          publicationDetails: publication_details,
         }.compact]
       rescue RegisterSourcesOc::Clients::ReconciliationClient::Error => e
         logger.error e
@@ -83,7 +79,7 @@ module RegisterTransformerSk
       def item
         return @item if @item
 
-        right_now = Time.zone.now.iso8601
+        right_now = Time.now.utc.iso8601
         @item = record.PartneriVerejnehoSektora.max_by do |p|
           p.PlatnostDo.nil? ? right_now : p.PlatnostDo
         end
@@ -106,7 +102,6 @@ module RegisterTransformerSk
           RegisterSourcesBods::Address.new(
             type: RegisterSourcesBods::AddressTypes['registered'], # TODO: check this
             address:,
-            # postCode: nil,
             country:,
           ),
         ]
@@ -138,19 +133,6 @@ module RegisterTransformerSk
             jurisdiction_code:,
             name: company_name,
           }.compact],
-        )
-      end
-
-      def statement_id
-        'TODO'
-      end
-
-      def publication_details
-        RegisterSourcesBods::PublicationDetails.new(
-          publicationDate: Time.now.utc.to_date.to_s, # TODO: fix publication date
-          bodsVersion: RegisterSourcesBods::BODS_VERSION,
-          license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER,
         )
       end
     end
