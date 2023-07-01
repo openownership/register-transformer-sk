@@ -1,12 +1,12 @@
 require 'register_transformer_sk/config/settings'
 require 'register_transformer_sk/config/adapters'
+
 require 'register_sources_bods/services/publisher'
-require 'register_transformer_sk/bods_mapping/record_processor'
 require 'register_sources_sk/structs/record'
 require 'register_sources_oc/services/resolver_service'
 require 'register_common/services/stream_client_kinesis'
 
-$stdout.sync = true
+require 'register_transformer_sk/bods_mapping/record_processor'
 
 module RegisterTransformerSk
   module Apps
@@ -44,12 +44,6 @@ module RegisterTransformerSk
       private
 
       attr_reader :bods_mapper, :stream_client, :consumer_id
-
-      def handle_records(records)
-        records.each do |_record|
-          bods_mapper.process sk_record
-        end
-      end
     end
   end
 end

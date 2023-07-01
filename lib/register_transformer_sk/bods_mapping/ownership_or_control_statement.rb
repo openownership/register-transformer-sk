@@ -1,8 +1,6 @@
-require 'register_sources_bods/constants/publisher'
 require 'register_sources_bods/structs/interest'
 require 'register_sources_bods/structs/entity_statement'
 require 'register_sources_bods/structs/ownership_or_control_statement'
-require 'register_sources_bods/structs/publication_details'
 require 'register_sources_bods/structs/share'
 require 'register_sources_bods/structs/source'
 require 'register_sources_bods/structs/subject'
@@ -29,14 +27,12 @@ module RegisterTransformerSk
 
       def call
         RegisterSourcesBods::OwnershipOrControlStatement[{
-          statementID: statement_id,
           statementType: statement_type,
           statementDate: statement_date,
           isComponent: false,
           subject:,
           interestedParty: interested_party,
           interests:,
-          publicationDetails: publication_details,
           source:,
         }.compact]
       end
@@ -52,14 +48,10 @@ module RegisterTransformerSk
       def item
         return @item if @item
 
-        right_now = Time.zone.now.iso8601
+        right_now = Time.now.utc.iso8601
         @item = sk_record.PartneriVerejnehoSektora.max_by do |p|
           p.PlatnostDo.nil? ? right_now : p.PlatnostDo
         end
-      end
-
-      def statement_id
-        "TODO" # filled in when published
       end
 
       def statement_type
@@ -105,15 +97,6 @@ module RegisterTransformerSk
         else
           raise UnsupportedSourceStatementTypeError
         end
-      end
-
-      def publication_details
-        RegisterSourcesBods::PublicationDetails.new(
-          publicationDate: Time.now.utc.to_date.to_s,
-          bodsVersion: RegisterSourcesBods::BODS_VERSION,
-          license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER,
-        )
       end
 
       def source

@@ -113,20 +113,10 @@ RSpec.describe RegisterTransformerSk::BodsMapping::OwnershipOrControlStatement d
         },
         interests: [],
         isComponent: false,
-        statementID: "TODO",
         statementDate: "2015-01-01",
         statementType: "ownershipOrControlStatement",
         subject: {
           describedByEntityStatement: "targetID",
-        },
-        publicationDetails: {
-          bodsVersion: "0.2",
-          license: "https://register.openownership.org/terms-and-conditions",
-          publicationDate: "2022-09-14",
-          publisher: {
-            name: "OpenOwnership Register",
-            url: "https://register.openownership.org",
-          },
         },
         source: {
           assertedBy: nil,

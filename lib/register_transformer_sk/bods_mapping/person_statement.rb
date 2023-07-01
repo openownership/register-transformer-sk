@@ -1,6 +1,4 @@
-require 'register_sources_bods/constants/publisher'
 require 'register_sources_bods/structs/person_statement'
-require 'register_sources_bods/structs/publication_details'
 require 'register_sources_bods/structs/source'
 
 require 'active_support/core_ext/object/blank'
@@ -23,27 +21,15 @@ module RegisterTransformerSk
 
       def call
         RegisterSourcesBods::PersonStatement[{
-          statementID: statement_id,
           statementType: statement_type,
-          # statementDate: statement_date,
-          isComponent: is_component,
+          isComponent: false,
           personType: person_type,
-          unspecifiedPersonDetails: unspecified_person_details,
           names:,
           identifiers:,
           nationalities:,
-          placeOfBirth: place_of_birth, # not implemented in register
           birthDate: birth_date,
-          deathDate: death_date,
-          placeOfResidence: place_of_residence,
-          taxResidencies: tax_residencies,
           addresses:,
-          hasPepStatus: has_pep_status,
-          pepStatusDetails: pep_status_details,
-          publicationDetails: publication_details,
           source:,
-          annotations:,
-          replacesStatements: replaces_statements,
         }.compact]
       end
 
@@ -51,16 +37,8 @@ module RegisterTransformerSk
 
       attr_reader :sk_record
 
-      def statement_id
-        "TODO" # This is filled in when statement is published
-      end
-
       def statement_type
         RegisterSourcesBods::StatementTypes['personStatement']
-      end
-
-      def statement_date
-        # NOT IMPLEMENTED
       end
 
       def person_type
@@ -74,10 +52,6 @@ module RegisterTransformerSk
             schemeName: 'SK Register Partnerov Verejného Sektora',
           ),
         ]
-      end
-
-      def unspecified_person_details
-        # { reason, description }
       end
 
       def names
@@ -106,24 +80,8 @@ module RegisterTransformerSk
         ISO3166::Country.find_country_by_number(sk_record.StatnaPrislusnost.StatistickyKod)
       end
 
-      def place_of_birth
-        # NOT IMPLEMENTED IN REGISTER
-      end
-
       def birth_date
         entity_dob(sk_record.DatumNarodenia).to_s
-      end
-
-      def death_date
-        # NOT IMPLEMENTED IN REGISTER
-      end
-
-      def place_of_residence
-        # NOT IMPLEMENTED IN REGISTER
-      end
-
-      def tax_residencies
-        # NOT IMPLEMENTED IN REGISTER
       end
 
       def addresses
@@ -148,36 +106,6 @@ module RegisterTransformerSk
         ]
       end
 
-      def has_pep_status
-        # NOT IMPLEMENTED IN REGISTER
-      end
-
-      def pep_status_details
-        # NOT IMPLEMENTED IN REGISTER
-      end
-
-      def statement_date
-        # UNIMPLEMENTED IN REGISTER (only for ownership or control statements)
-      end
-
-      def is_component
-        false
-      end
-
-      def replaces_statements
-        # UNIMPLEMENTED IN REGISTER
-      end
-
-      def publication_details
-        # UNIMPLEMENTED IN REGISTER
-        RegisterSourcesBods::PublicationDetails.new(
-          publicationDate: Time.now.utc.to_date.to_s, # TODO: fix publication date
-          bodsVersion: RegisterSourcesBods::BODS_VERSION,
-          license: RegisterSourcesBods::BODS_LICENSE,
-          publisher: RegisterSourcesBods::PUBLISHER,
-        )
-      end
-
       def source
         RegisterSourcesBods::Source.new(
           type: RegisterSourcesBods::SourceTypes['officialRegister'],
@@ -186,14 +114,6 @@ module RegisterTransformerSk
           retrievedAt: Time.now.utc.to_date.to_s, # TODO: fix publication date, # TODO: add retrievedAt to sk_record iso8601
           assertedBy: nil, # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
         )
-      end
-
-      def annotations
-        # UNIMPLEMENTED IN REGISTER
-      end
-
-      def replaces_statements
-        # UNIMPLEMENTED IN REGISTER
       end
 
       def address_string(address)
