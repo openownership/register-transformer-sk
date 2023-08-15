@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
+
 require 'register_transformer_sk/config/settings'
 
 require 'register_sources_bods/services/es_index_creator'
