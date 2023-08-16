@@ -1,62 +1,44 @@
-version: '3.7'
-
+version: "3.8"
 services:
-  register_transformer_sk:
-    image: register_transformer_sk:latest
-    #entrypoint: "bundle exec /app/bin/transform"
-    network_mode: host
-    environment:
-      - ELASTICSEARCH_HOST
-      - ELASTICSEARCH_PORT
-      - ELASTICSEARCH_PROTOCOL
-      - ELASTICSEARCH_SSL_VERIFY
-      - ELASTICSEARCH_PASSWORD
-      - OC_API_TOKEN
-      - OC_API_TOKEN_PROTECTED
-      - BODS_S3_BUCKET_NAME
-      - BODS_AWS_REGION
-      - BODS_AWS_ACCESS_KEY_ID
-      - BODS_AWS_SECRET_ACCESS_KEY
-      - REDIS_HOST
-      - REDIS_PORT
-      - SK_STREAM
-      - BODS_STREAM
-      - BODS_INDEX
-      - GOOGLE_GEOCODE_API_KEY
-    restart: always
-
-  register_transformer_sk_redis:
-    image: redis:7.0.5
-    ports: 
-      - "6379:6379"
-    restart: always
-
-  register_sk_elasticsearch_test:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
-    environment:
-      - 'discovery.type=single-node'
-      - 'cluster.name=register-elasticsearch'
-      - 'bootstrap.memory_lock=true'
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-      - 'xpack.security.enabled=false'
+  transformer-sk:
+    build:
+      context: .
+      target: dev
+    env_file: .env
     networks:
-      - register_transformer_sk_test
-    expose:
-      - 9200
-
-  register_transformer_sk_unittests:
-    image: register_transformer_sk:latest
-    environment:
-      - ELASTICSEARCH_HOST=register_sk_elasticsearch_test
-      - ELASTICSEARCH_PASSWORD=
-      - ELASTICSEARCH_PORT=9200
-      - TEST=1
-    links:
-      - register_sk_elasticsearch_test
-    networks:
-      - register_transformer_sk_test
+      - elasticsearch
+      - redis
+      - transformer
+    restart: on-failure
     volumes:
-      - '.:/app'
-
+      - ${DC_TRANSFORMER_SK_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
+      - ${DC_TRANSFORMER_SK_LIB_REGISTER_SOURCES_BODS:-.dockerempty}:/home/x/lib/register-sources-bods
+      - ${DC_TRANSFORMER_SK_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
+      - ${DC_TRANSFORMER_SK_LIB_REGISTER_SOURCES_SK:-.dockerempty}:/home/x/lib/register-sources-sk
+      - ./bin:/home/x/r/bin
+      - ./Gemfile.lock:/home/x/r/Gemfile.lock
+      - ./Gemfile:/home/x/r/Gemfile
+      - ./lib:/home/x/r/lib
+      - ./register_transformer_sk.gemspec:/home/x/r/register_transformer_sk.gemspec
+      - ./spec:/home/x/r/spec
+  redis:
+    healthcheck:
+      interval: 5s
+      retries: 6
+      start_period: 60s
+      test:
+        - CMD
+        - redis-cli
+        - PING
+    image: docker.io/library/redis:7.0.5
+    networks:
+      - redis
+    restart: on-failure
+    volumes:
+      - redis:/data
 networks:
-  register_transformer_sk_test:
+  elasticsearch: {}
+  redis: {}
+  transformer: {}
+volumes:
+  redis: {}
