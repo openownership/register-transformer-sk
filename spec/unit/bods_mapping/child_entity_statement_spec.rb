@@ -93,7 +93,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
   before { travel_to Time.at(1_663_187_854) }
   after { travel_back }
 
-  it 'maps successfully' do
+  it 'maps successfully' do # rubocop:disable RSpec/ExampleLength
     expect(geocoder_client).to receive(:jurisdiction).with(
       "1234/1 Example Street, Example Place, 12345",
     ).and_return 'sk'
@@ -120,6 +120,14 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
         registered_address_in_full: 'registered address',
         registered_address_country: "United Kingdom",
       },
+      add_ids: [
+        {
+          company_number: '1234567',
+          jurisdiction_code: 'sk',
+          uid: 'XXXXXXXXXXXXX1234567',
+          identifier_system_code: 'lei',
+        },
+      ],
     }]
 
     result = subject.call
@@ -148,6 +156,12 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
             id: "https://opencorporates.com/companies//1234567",
             schemeName: "OpenCorporates",
             uri: "https://opencorporates.com/companies//1234567",
+          },
+          {
+            id: "XXXXXXXXXXXXX1234567",
+            scheme: "XI-LEI",
+            schemeName: "Global Legal Entity Identifier Index",
+            uri: "https://opencorporates.com/companies/sk/1234567",
           },
         ],
         isComponent: false,

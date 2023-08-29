@@ -62,6 +62,7 @@ module RegisterTransformerSk
               id: item.Ico,
             ),
             open_corporates_identifier,
+            lei_identifier,
           ].compact,
           addresses:,
           foundingDate: founding_date,
