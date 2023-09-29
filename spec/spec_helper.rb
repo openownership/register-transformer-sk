@@ -26,7 +26,6 @@ RSpec.configure do |config|
     allow_localhost: true,
     allow: [
       'chromedriver.storage.googleapis.com',
-      'register_sk_elasticsearch_test',
     ],
   )
 end
