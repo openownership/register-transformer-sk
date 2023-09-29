@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'bundler/setup'
+
 require 'register_transformer_sk/apps/transformer_bulk'
 
 RegisterTransformerSk::Apps::TransformerBulk.bash_call ARGV
