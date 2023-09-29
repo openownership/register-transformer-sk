@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/testing/time_helpers'
 
 require 'register_transformer_sk/bods_mapping/record_processor'
@@ -12,7 +14,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::RecordProcessor do
       person_statement_mapper:,
       child_entity_statement_mapper:,
       ownership_or_control_statement_mapper:,
-      bods_publisher:,
+      bods_publisher:
     )
   end
 
@@ -26,37 +28,37 @@ RSpec.describe RegisterTransformerSk::BodsMapping::RecordProcessor do
           Meno: nil,
           Priezvisko: nil,
           DatumNarodenia: nil,
-          ObchodneMeno: "Example Slovak Company",
-          Ico: "1234567",
-          PlatnostOd: "2015-01-01T00:00:00+01:00",
+          ObchodneMeno: 'Example Slovak Company',
+          Ico: '1234567',
+          PlatnostOd: '2015-01-01T00:00:00+01:00',
           PlatnostDo: nil,
           Adresa: {
-            MenoUlice: "Example Street",
-            OrientacneCislo: "1234/1",
-            Mesto: "Example Place",
-            Psc: "12345",
-          },
-        },
+            MenoUlice: 'Example Street',
+            OrientacneCislo: '1234/1',
+            Mesto: 'Example Place',
+            Psc: '12345'
+          }
+        }
       ],
       KonecniUzivateliaVyhod: [
         {
           Id: 1,
-          Meno: "Example",
-          Priezvisko: "Person 1",
-          DatumNarodenia: "1950-01-01T00:00:00+02:00",
-          PlatnostOd: "2015-01-01T00:00:00+01:00",
+          Meno: 'Example',
+          Priezvisko: 'Person 1',
+          DatumNarodenia: '1950-01-01T00:00:00+02:00',
+          PlatnostOd: '2015-01-01T00:00:00+01:00',
           PlatnostDo: nil,
           StatnaPrislusnost: {
-            StatistickyKod: "703",
+            StatistickyKod: '703'
           },
           Adresa: {
-            MenoUlice: "Example Street",
-            OrientacneCislo: "1234/1",
-            Mesto: "Example Place",
-            Psc: "12345",
-          },
-        },
-      ],
+            MenoUlice: 'Example Street',
+            OrientacneCislo: '1234/1',
+            Mesto: 'Example Place',
+            Psc: '12345'
+          }
+        }
+      ]
     }
     RegisterSourcesSk::Record[data]
   end
@@ -72,12 +74,12 @@ RSpec.describe RegisterTransformerSk::BodsMapping::RecordProcessor do
     child_entity = double 'child_entity'
     expect(child_entity_statement_mapper).to receive(:call).with(
       sk_record,
-      entity_resolver:,
+      entity_resolver:
     ).and_return child_entity
 
     parent_entity = double 'parent_entity'
     expect(person_statement_mapper).to receive(:call).with(
-      sk_record.KonecniUzivateliaVyhod.first,
+      sk_record.KonecniUzivateliaVyhod.first
     ).and_return parent_entity
 
     source_statement = double 'source_statement'
@@ -87,7 +89,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::RecordProcessor do
     expect(ownership_or_control_statement_mapper).to receive(:call).with(
       sk_record,
       source_statement:,
-      target_statement:,
+      target_statement:
     ).and_return ownership_or_control_statement
 
     expect(bods_publisher).to receive(:publish).with(parent_entity).and_return source_statement

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/testing/time_helpers'
 
 require 'register_transformer_sk/bods_mapping/person_statement'
@@ -14,20 +16,20 @@ RSpec.describe RegisterTransformerSk::BodsMapping::PersonStatement do
   let(:sk_record) do
     data = {
       Id: 1,
-      Meno: "Example",
-      Priezvisko: "Person 1",
-      DatumNarodenia: "1950-01-01T00:00:00+02:00",
-      PlatnostOd: "2015-01-01T00:00:00+01:00",
+      Meno: 'Example',
+      Priezvisko: 'Person 1',
+      DatumNarodenia: '1950-01-01T00:00:00+02:00',
+      PlatnostOd: '2015-01-01T00:00:00+01:00',
       PlatnostDo: nil,
       StatnaPrislusnost: {
-        StatistickyKod: "703",
+        StatistickyKod: '703'
       },
       Adresa: {
-        MenoUlice: "Example Street",
-        OrientacneCislo: "1234/1",
-        Mesto: "Example Place",
-        Psc: "12345",
-      },
+        MenoUlice: 'Example Street',
+        OrientacneCislo: '1234/1',
+        Mesto: 'Example Place',
+        Psc: '12345'
+      }
     }
     RegisterSourcesSk::KonecniUzivateliaVyhod[data]
   end
@@ -40,32 +42,32 @@ RSpec.describe RegisterTransformerSk::BodsMapping::PersonStatement do
       {
         addresses: [
           {
-            address: "1234/1 Example Street, Example Place, 12345",
-            country: "SK",
-            type: "registered",
-          },
+            address: '1234/1 Example Street, Example Place, 12345',
+            country: 'SK',
+            type: 'registered'
+          }
         ],
-        birthDate: "1950-01-01",
+        birthDate: '1950-01-01',
         identifiers: [
-          { id: "1", schemeName: "SK Register Partnerov Verejného Sektora" },
+          { id: '1', schemeName: 'SK Register Partnerov Verejného Sektora' }
         ],
         isComponent: false,
         names: [
-          { fullName: "Example Person 1", type: "individual" },
+          { fullName: 'Example Person 1', type: 'individual' }
         ],
         nationalities: [
-          { code: "SK", name: "Slovakia" },
+          { code: 'SK', name: 'Slovakia' }
         ],
-        personType: "knownPerson",
+        personType: 'knownPerson',
         source: {
           assertedBy: nil,
-          description: "SK Register Partnerov Verejného Sektora",
-          retrievedAt: "2022-09-14",
-          type: "officialRegister",
-          url: "https://rpvs.gov.sk/OpenData/Partneri",
+          description: 'SK Register Partnerov Verejného Sektora',
+          retrievedAt: '2022-09-14',
+          type: 'officialRegister',
+          url: 'https://rpvs.gov.sk/OpenData/Partneri'
         },
-        statementType: "personStatement",
-      },
+        statementType: 'personStatement'
+      }
     )
   end
 end
