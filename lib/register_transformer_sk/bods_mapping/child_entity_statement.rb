@@ -32,7 +32,7 @@ module RegisterTransformerSk
       OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'
 
       def self.call(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
-        new(record, entity_resolver:, geocoder_client:, logger: nil).call
+        new(record, entity_resolver:, geocoder_client:, logger:).call
       end
 
       def initialize(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
