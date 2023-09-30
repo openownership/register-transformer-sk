@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'redis'
 
@@ -19,8 +21,8 @@ module RegisterTransformerSk
   module Apps
     class TransformerBulk
       BATCH_SIZE = 25
-      NAMESPACE = 'SK_TRANSFORMER_BULK'.freeze
-      PARALLEL_FILES = ENV.fetch("SK_PARALLEL_FILES", 5).to_i
+      NAMESPACE = 'SK_TRANSFORMER_BULK'
+      PARALLEL_FILES = ENV.fetch('SK_PARALLEL_FILES', 5).to_i
 
       def self.bash_call(args)
         s3_prefix = args.last
@@ -32,11 +34,12 @@ module RegisterTransformerSk
         @s3_adapter = s3_adapter || RegisterTransformerSk::Config::Adapters::S3_ADAPTER
         @bods_mapper = bods_mapper || RegisterTransformerSk::BodsMapping::RecordProcessor.new(
           entity_resolver: RegisterSourcesOc::Services::ResolverService.new,
-          bods_publisher: RegisterSourcesBods::Services::Publisher.new,
+          bods_publisher: RegisterSourcesBods::Services::Publisher.new
         )
         @redis = redis || Redis.new(host: ENV.fetch('REDIS_HOST', nil), port: ENV.fetch('REDIS_PORT', nil))
         @s3_bucket = s3_bucket || ENV.fetch('BODS_S3_BUCKET_NAME')
-        @file_reader = file_reader || RegisterCommon::Services::FileReader.new(s3_adapter: @s3_adapter, batch_size: BATCH_SIZE)
+        @file_reader = file_reader || RegisterCommon::Services::FileReader.new(s3_adapter: @s3_adapter,
+                                                                               batch_size: BATCH_SIZE)
       end
 
       def call(s3_prefix)
@@ -78,7 +81,7 @@ module RegisterTransformerSk
             sk_record = RegisterSourcesSk::Record[**record]
             bods_mapper.process(sk_record)
           rescue StandardError => e
-            print "Got error: ", e, " for record: ", record_data, "\n\n"
+            print 'Got error: ', e, ' for record: ', record_data, "\n\n"
           end
         end
       end

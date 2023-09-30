@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_transformer_sk/bods_mapping/person_statement'
 require 'register_transformer_sk/bods_mapping/child_entity_statement'
 require 'register_transformer_sk/bods_mapping/ownership_or_control_statement'
@@ -5,6 +7,7 @@ require 'register_transformer_sk/bods_mapping/ownership_or_control_statement'
 module RegisterTransformerSk
   module BodsMapping
     class RecordProcessor
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         entity_resolver: nil,
         person_statement_mapper: BodsMapping::PersonStatement,
@@ -20,6 +23,7 @@ module RegisterTransformerSk
         @ownership_or_control_statement_mapper = ownership_or_control_statement_mapper
         @error_adapter = error_adapter
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def process(sk_record)
         # Pre-emptive check for pagination in child entities. We've never seen it,
@@ -62,7 +66,7 @@ module RegisterTransformerSk
         ownership_or_control_statement_mapper.call(
           sk_record,
           source_statement: parent_entity,
-          target_statement: child_entity,
+          target_statement: child_entity
         )
       end
     end

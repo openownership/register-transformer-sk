@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 require 'register_sources_bods/enums/entity_types'
@@ -27,10 +29,10 @@ module RegisterTransformerSk
     class ChildEntityStatement
       include RegisterSourcesBods::Mappers::ResolverMappings
 
-      OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'.freeze
+      OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'
 
       def self.call(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
-        new(record, entity_resolver:, geocoder_client:, logger: nil).call
+        new(record, entity_resolver:, geocoder_client:, logger:).call
       end
 
       def initialize(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
@@ -42,10 +44,10 @@ module RegisterTransformerSk
 
       def call
         if item.nil?
-          logger.warn("[#{self.class.name}] record Id: #{record.Id} has no current child entity (PartneriVerejnehoSektora)")
+          logger.warn("[#{self.class.name}] record Id: #{record.Id} has no current child entity (PartneriVerejnehoSektora)") # rubocop:disable Layout/LineLength
           return
         elsif item.ObchodneMeno.nil?
-          logger.warn("[#{self.class.name}] record Id: #{record.Id} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)")
+          logger.warn("[#{self.class.name}] record Id: #{record.Id} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)") # rubocop:disable Layout/LineLength
           return
         end
 
@@ -59,14 +61,14 @@ module RegisterTransformerSk
             RegisterSourcesBods::Identifier.new(
               scheme: 'SK-ORSR',
               schemeName: 'Ministry of Justice Business Register',
-              id: item.Ico,
+              id: item.Ico
             ),
             open_corporates_identifier,
-            lei_identifier,
+            lei_identifier
           ].compact,
           addresses:,
           foundingDate: founding_date,
-          dissolutionDate: dissolution_date,
+          dissolutionDate: dissolution_date
         }.compact]
       rescue RegisterSourcesOc::Clients::ReconciliationClient::Error => e
         logger.error e
@@ -103,8 +105,8 @@ module RegisterTransformerSk
           RegisterSourcesBods::Address.new(
             type: RegisterSourcesBods::AddressTypes['registered'], # TODO: check this
             address:,
-            country:,
-          ),
+            country:
+          )
         ]
       end
 
@@ -132,8 +134,8 @@ module RegisterTransformerSk
           RegisterSourcesOc::ResolverRequest[{
             company_number:,
             jurisdiction_code:,
-            name: company_name,
-          }.compact],
+            name: company_name
+          }.compact]
         )
       end
     end

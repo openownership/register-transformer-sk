@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_sources_bods/structs/person_statement'
 require 'register_sources_bods/structs/source'
 
@@ -9,7 +11,7 @@ require 'iso8601'
 module RegisterTransformerSk
   module BodsMapping
     class PersonStatement
-      ID_PREFIX = 'openownership-register-'.freeze
+      ID_PREFIX = 'openownership-register-'
 
       def self.call(sk_record)
         new(sk_record).call
@@ -29,7 +31,7 @@ module RegisterTransformerSk
           nationalities:,
           birthDate: birth_date,
           addresses:,
-          source:,
+          source:
         }.compact]
       end
 
@@ -49,8 +51,8 @@ module RegisterTransformerSk
         [
           RegisterSourcesBods::Identifier.new(
             id: sk_record.Id.to_s,
-            schemeName: 'SK Register Partnerov Verejného Sektora',
-          ),
+            schemeName: 'SK Register Partnerov Verejného Sektora'
+          )
         ]
       end
 
@@ -58,8 +60,8 @@ module RegisterTransformerSk
         [
           RegisterSourcesBods::Name.new(
             type: RegisterSourcesBods::NameTypes['individual'],
-            fullName: name_string,
-          ),
+            fullName: name_string
+          )
         ]
       end
 
@@ -72,7 +74,7 @@ module RegisterTransformerSk
         return nil if country.blank?
 
         [
-          RegisterSourcesBods::Country.new(name: country.name, code: country.alpha2),
+          RegisterSourcesBods::Country.new(name: country.name, code: country.alpha2)
         ]
       end
 
@@ -101,8 +103,8 @@ module RegisterTransformerSk
             type: RegisterSourcesBods::AddressTypes['registered'], # TODO: check this
             address:,
             # postCode: nil,
-            country:,
-          ),
+            country:
+          )
         ]
       end
 
@@ -110,9 +112,9 @@ module RegisterTransformerSk
         RegisterSourcesBods::Source.new(
           type: RegisterSourcesBods::SourceTypes['officialRegister'],
           description: 'SK Register Partnerov Verejného Sektora',
-          url: "https://rpvs.gov.sk/OpenData/Partneri",
-          retrievedAt: Time.now.utc.to_date.to_s, # TODO: fix publication date, # TODO: add retrievedAt to sk_record iso8601
-          assertedBy: nil, # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
+          url: 'https://rpvs.gov.sk/OpenData/Partneri',
+          retrievedAt: Time.now.utc.to_date.to_s, # TODO: fix publication date, # TODO: add retrievedAt to sk_record iso8601 # rubocop:disable Layout/LineLength
+          assertedBy: nil # TODO: if it is a combination of sources (DK and OpenCorporates), is it us?
         )
       end
 

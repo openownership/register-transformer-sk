@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_transformer_sk/config/settings'
 require 'register_transformer_sk/config/adapters'
 
@@ -17,15 +19,15 @@ module RegisterTransformerSk
         s3_adapter ||= RegisterTransformerSk::Config::Adapters::S3_ADAPTER
         @bods_mapper = bods_mapper || RegisterTransformerSk::BodsMapping::RecordProcessor.new(
           entity_resolver:,
-          bods_publisher:,
+          bods_publisher:
         )
         @stream_client = RegisterCommon::Services::StreamClientKinesis.new(
           credentials: RegisterTransformerSk::Config::AWS_CREDENTIALS,
           stream_name: ENV.fetch('SK_STREAM', 'SK_STREAM'),
           s3_adapter:,
-          s3_bucket: ENV.fetch('BODS_S3_BUCKET_NAME', nil),
+          s3_bucket: ENV.fetch('BODS_S3_BUCKET_NAME', nil)
         )
-        @consumer_id = "RegisterTransformerSk"
+        @consumer_id = 'RegisterTransformerSk'
       end
 
       def call
@@ -36,7 +38,7 @@ module RegisterTransformerSk
             sk_record = RegisterSourcesSk::Record[**record]
             bods_mapper.process(sk_record)
           rescue StandardError => e
-            print "Got error: ", e, " for record: ", record_data, "\n\n"
+            print 'Got error: ', e, ' for record: ', record_data, "\n\n"
           end
         end
       end

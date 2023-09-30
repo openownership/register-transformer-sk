@@ -15,7 +15,7 @@ cp .env.example .env
 Create the Elasticsearch BODS index (configured by `BODS_INDEX`):
 
 ```sh
-docker compose run transformer-sk setup_indexes
+docker compose run transformer-sk create-indexes
 ```
 
 ## Testing
