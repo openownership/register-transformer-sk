@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
-require 'register_sources_bods/structs/person_statement'
-require 'register_sources_bods/structs/source'
-
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/object/try'
 require 'countries'
 require 'iso8601'
+require 'register_sources_bods/structs/person_statement'
+require 'register_sources_bods/structs/source'
 
 module RegisterTransformerSk
   module BodsMapping
     class PersonStatement
-      ID_PREFIX = 'openownership-register-'
-
       def self.call(sk_record)
         new(sk_record).call
       end

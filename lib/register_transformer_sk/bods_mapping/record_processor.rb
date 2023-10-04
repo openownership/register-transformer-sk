@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'register_transformer_sk/bods_mapping/person_statement'
-require 'register_transformer_sk/bods_mapping/child_entity_statement'
-require 'register_transformer_sk/bods_mapping/ownership_or_control_statement'
+require_relative 'child_entity_statement'
+require_relative 'ownership_or_control_statement'
+require_relative 'person_statement'
 
 module RegisterTransformerSk
   module BodsMapping

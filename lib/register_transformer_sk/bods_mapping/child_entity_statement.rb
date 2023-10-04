@@ -1,26 +1,23 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/date'
+require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/object/try'
+require 'active_support/core_ext/string/conversions'
+require 'active_support/core_ext/time'
+require 'countries'
+require 'iso8601'
 require 'logger'
-
 require 'register_sources_bods/enums/entity_types'
 require 'register_sources_bods/enums/statement_types'
+require 'register_sources_bods/mappers/resolver_mappings'
 require 'register_sources_bods/structs/address'
 require 'register_sources_bods/structs/entity_statement'
 require 'register_sources_bods/structs/identifier'
 require 'register_sources_bods/structs/jurisdiction'
-require 'register_sources_bods/mappers/resolver_mappings'
-
-require 'active_support/core_ext/object/blank'
-require 'active_support/core_ext/object/try'
-require 'active_support/core_ext/time'
-require 'active_support/core_ext/date'
-require 'active_support/core_ext/string/conversions'
-require 'countries'
-require 'iso8601'
-
 require 'register_sources_oc/structs/resolver_request'
 
-require 'register_transformer_sk/clients/google_geocoder_client'
+require_relative '../clients/google_geocoder_client'
 
 Time.zone = 'UTC'
 
@@ -28,8 +25,6 @@ module RegisterTransformerSk
   module BodsMapping
     class ChildEntityStatement
       include RegisterSourcesBods::Mappers::ResolverMappings
-
-      OPEN_CORPORATES_SCHEME_NAME = 'OpenCorporates'
 
       def self.call(record, entity_resolver: nil, geocoder_client: nil, logger: nil)
         new(record, entity_resolver:, geocoder_client:, logger:).call

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'register_common/adapters/s3_adapter'
-require 'register_transformer_sk/config/settings'
+
+require_relative 'settings'
 
 module RegisterTransformerSk
   module Config

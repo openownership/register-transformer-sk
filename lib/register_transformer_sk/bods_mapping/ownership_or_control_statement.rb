@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
-require 'register_sources_bods/structs/interest'
+require 'active_support/core_ext/time'
 require 'register_sources_bods/structs/entity_statement'
+require 'register_sources_bods/structs/interest'
 require 'register_sources_bods/structs/ownership_or_control_statement'
 require 'register_sources_bods/structs/share'
 require 'register_sources_bods/structs/source'
 require 'register_sources_bods/structs/subject'
 
-require 'active_support/core_ext/time'
 Time.zone = 'UTC'
 
 module RegisterTransformerSk
   module BodsMapping
     class OwnershipOrControlStatement
       UnsupportedSourceStatementTypeError = Class.new(StandardError)
-
-      ID_PREFIX = 'openownership-register-'
 
       def self.call(sk_record, **kwargs)
         new(sk_record, **kwargs).call
