@@ -2,26 +2,22 @@
 
 require 'json'
 require 'redis'
-
-require 'register_transformer_sk/config/settings'
-require 'register_transformer_sk/config/adapters'
-
 require 'register_common/services/file_reader'
-
 require 'register_sources_bods/services/publisher'
 require 'register_sources_oc/services/resolver_service'
-
 require 'register_sources_sk/structs/record'
 
-require 'register_transformer_sk/bods_mapping/record_processor'
+require_relative '../bods_mapping/record_processor'
+require_relative '../config/adapters'
+require_relative '../config/settings'
 
 $stdout.sync = true
 
 module RegisterTransformerSk
   module Apps
     class TransformerBulk
-      BATCH_SIZE = 25
-      NAMESPACE = 'SK_TRANSFORMER_BULK'
+      BATCH_SIZE     = 25
+      NAMESPACE      = 'SK_TRANSFORMER_BULK'
       PARALLEL_FILES = ENV.fetch('SK_PARALLEL_FILES', 5).to_i
 
       def self.bash_call(args)

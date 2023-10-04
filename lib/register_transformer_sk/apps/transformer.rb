@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-require 'register_transformer_sk/config/settings'
-require 'register_transformer_sk/config/adapters'
-
-require 'register_sources_bods/services/publisher'
-require 'register_sources_sk/structs/record'
-require 'register_sources_oc/services/resolver_service'
 require 'register_common/services/stream_client_kinesis'
+require 'register_sources_bods/services/publisher'
+require 'register_sources_oc/services/resolver_service'
+require 'register_sources_sk/structs/record'
 
-require 'register_transformer_sk/bods_mapping/record_processor'
+require_relative '../bods_mapping/record_processor'
+require_relative '../config/adapters'
+require_relative '../config/settings'
 
 module RegisterTransformerSk
   module Apps
