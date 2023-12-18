@@ -50,6 +50,7 @@ module RegisterTransformerSk
           statementType: RegisterSourcesBods::StatementTypes['entityStatement'],
           isComponent: false,
           name: company_name,
+          alternateNames: alternate_names,
           entityType: RegisterSourcesBods::EntityTypes['registeredEntity'],
           incorporatedInJurisdiction: incorporated_in_jurisdiction,
           identifiers: [

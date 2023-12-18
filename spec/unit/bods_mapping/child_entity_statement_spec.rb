@@ -110,6 +110,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
       resolved: true,
       reconciliation_response: nil,
       company_number: '1234567',
+      jurisdiction_code: 'sk',
       # name: "Example Slovak Company",
       company: {
         company_number: '1234567',
@@ -155,9 +156,9 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
             schemeName: 'Ministry of Justice Business Register'
           },
           {
-            id: 'https://opencorporates.com/companies//1234567',
+            id: 'https://opencorporates.com/companies/sk/1234567',
             schemeName: 'OpenCorporates',
-            uri: 'https://opencorporates.com/companies//1234567'
+            uri: 'https://opencorporates.com/companies/sk/1234567'
           },
           {
             id: 'XXXXXXXXXXXXX1234567',
@@ -166,6 +167,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
             uri: 'https://search.gleif.org/#/record/XXXXXXXXXXXXX1234567'
           }
         ],
+        incorporatedInJurisdiction: { code: 'SK', name: 'Slovakia' },
         isComponent: false,
         statementType: 'entityStatement'
       }
