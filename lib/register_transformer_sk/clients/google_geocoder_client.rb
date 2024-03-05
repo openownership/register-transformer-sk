@@ -15,9 +15,6 @@ module RegisterTransformerSk
         return nil unless result.success?
 
         result.country_code.downcase
-      rescue StandardError => e
-        error_adapter.error(e)
-        nil
       end
 
       private

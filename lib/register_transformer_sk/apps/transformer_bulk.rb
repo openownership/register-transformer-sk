@@ -32,7 +32,7 @@ module RegisterTransformerSk
           entity_resolver: RegisterSourcesOc::Services::ResolverService.new,
           bods_publisher: RegisterSourcesBods::Services::Publisher.new
         )
-        @redis = redis || Redis.new(host: ENV.fetch('REDIS_HOST', nil), port: ENV.fetch('REDIS_PORT', nil))
+        @redis = redis || Redis.new(url: ENV.fetch('REDIS_URL'))
         @s3_bucket = s3_bucket || ENV.fetch('BODS_S3_BUCKET_NAME')
         @file_reader = file_reader || RegisterCommon::Services::FileReader.new(s3_adapter: @s3_adapter,
                                                                                batch_size: BATCH_SIZE)
@@ -72,13 +72,8 @@ module RegisterTransformerSk
       def process_rows(rows)
         rows.each do |record_data|
           record = JSON.parse(record_data, symbolize_names: true)
-
-          begin
-            sk_record = RegisterSourcesSk::Record[**record]
-            bods_mapper.process(sk_record)
-          rescue StandardError => e
-            print 'Got error: ', e, ' for record: ', record_data, "\n\n"
-          end
+          sk_record = RegisterSourcesSk::Record[**record]
+          bods_mapper.process(sk_record)
         end
       end
 
