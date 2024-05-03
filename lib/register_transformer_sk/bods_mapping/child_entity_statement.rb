@@ -44,6 +44,9 @@ module RegisterTransformerSk
         elsif item.ObchodneMeno.nil?
           logger.warn("[#{self.class.name}] record Id: #{record.Id} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)") # rubocop:disable Layout/LineLength
           return
+        elsif item.Ico.nil?
+          logger.warn("[#{self.class.name}] record Id: #{record.Id} has no IČO (company ID)")
+          return
         end
 
         RegisterSourcesBods::EntityStatement[{
