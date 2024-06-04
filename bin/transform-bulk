@@ -13,6 +13,7 @@ s3_prefix = ARGV.last
 
 transformer = RegisterSourcesBods::Apps::TransformerBulk.new(
   namespace: 'SK_TRANSFORMER_BULK',
+  namespace_transformed: 'transformer-sk',
   parallel_files: ENV.fetch('SK_PARALLEL_FILES', 5).to_i,
   record_processor: RegisterTransformerSk::BodsMapping::RecordProcessor,
   record_struct: RegisterSourcesSk::Record,

@@ -12,6 +12,7 @@ require 'register_transformer_sk/config/settings'
 transformer = RegisterSourcesBods::Apps::TransformerStream.new(
   credentials: RegisterTransformerSk::Config::AWS_CREDENTIALS,
   consumer_id: 'RegisterTransformerSk',
+  namespace_transformed: 'transformer-sk',
   record_processor: RegisterTransformerSk::BodsMapping::RecordProcessor,
   record_struct: RegisterSourcesSk::Record,
   s3_adapter: RegisterTransformerSk::Config::Adapters::S3_ADAPTER,
