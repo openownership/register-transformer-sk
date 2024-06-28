@@ -163,7 +163,7 @@ RSpec.describe RegisterTransformerSk::BodsMapping::ChildEntityStatement do
           {
             id: 'XXXXXXXXXXXXX1234567',
             scheme: 'XI-LEI',
-            schemeName: 'Global Legal Entity Identifier Index',
+            schemeName: 'Global Legal Entity Identifier Index (2)',
             uri: 'https://search.gleif.org/#/record/XXXXXXXXXXXXX1234567'
           }
         ],
